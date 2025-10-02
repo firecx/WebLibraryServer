@@ -2,6 +2,7 @@ package org.firecx.server.entities;
 
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,7 +38,8 @@ public class Book {
     @Column(name = "volume", nullable = false, unique = false)
     private Integer volume;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //переделать cascade
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "authors_id", foreignKey = @ForeignKey(name = "fk_books_authors_id"))
     private Author author;
 
