@@ -50,9 +50,9 @@ public class Author {
     public String toString() {
         return "Author{"
         + "id=" + id
-        + "nickname=" + nickname
-        + "name=" + name
-        + "surname=" + surmane
-        ;
+        + ", nickname=" + nickname
+        + ", name=" + name
+        + ", surname=" + surmane
+        + "}";
     }
 }
