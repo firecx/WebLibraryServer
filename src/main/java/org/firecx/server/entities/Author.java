@@ -1,5 +1,7 @@
 package org.firecx.server.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +32,27 @@ public class Author {
 
     @Column(name = "surmane", nullable = true, unique = false)
     private String surmane;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return nickname.equals(author.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nickname);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{"
+        + "id=" + id
+        + "nickname=" + nickname
+        + "name=" + name
+        + "surname=" + surmane
+        ;
+    }
 }
