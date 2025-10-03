@@ -13,6 +13,7 @@ import org.firecx.server.models.BookResponse;
 import org.firecx.server.models.CreateBookRequest;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
@@ -25,7 +26,7 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     @Override
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<BookResponse> findAll() {
         return bookRepository.findAll()
         .stream()
@@ -35,7 +36,7 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     @Override
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public BookResponse findById(@NonNull Integer bookId) {
         return bookRepository.findById(bookId)
         .map(this::buildBookResponse)
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public BookResponse createBook(@NonNull CreateBookRequest request) {
         Book book = buildBookRequest(request);
         return buildBookResponse(bookRepository.save(book));
@@ -52,7 +53,7 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public BookResponse update(@NonNull Integer bookId, @NonNull CreateBookRequest request) {
         Book book = bookRepository.findById(bookId)
         .orElseThrow(() -> new EntityNotFoundException("Book " + bookId + " is not found"));
@@ -61,7 +62,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public void delete(@NonNull Integer bookId) {
         bookRepository.deleteById(bookId);
     }
@@ -75,7 +76,7 @@ public class BookServiceImpl implements BookService{
         .setVolume(book.getVolume())
         .setAuthor(new AuthorResponse()
         .setId(book.getAuthor().getId())
-        .setSurmane(book.getAuthor().getSurmane())
+        .setSurname(book.getAuthor().getSurname())
         .setName(book.getAuthor().getName())
         .setNickname(book.getAuthor().getNickname()));
     }
@@ -88,7 +89,7 @@ public class BookServiceImpl implements BookService{
         .setVolume(request.getVolume())
         .setAuthor(new Author()
         .setId(request.getAuthor().getId())
-        .setSurmane(request.getAuthor().getSurmane())
+        .setSurname(request.getAuthor().getSurname())
         .setName(request.getAuthor().getName())
         .setNickname(request.getAuthor().getNickname()));
     }

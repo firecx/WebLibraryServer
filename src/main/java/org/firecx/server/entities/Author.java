@@ -30,8 +30,8 @@ public class Author {
     @Column(name = "name", nullable = true, unique = false)
     private String name;
 
-    @Column(name = "surmane", nullable = true, unique = false)
-    private String surmane;
+    @Column(name = "surname", nullable = true, unique = false)
+    private String surname;
 
     @Override
     public boolean equals(Object o) {
@@ -52,7 +52,7 @@ public class Author {
         + "id=" + id
         + ", nickname=" + nickname
         + ", name=" + name
-        + ", surname=" + surmane
+        + ", surname=" + surname
         + "}";
     }
 }

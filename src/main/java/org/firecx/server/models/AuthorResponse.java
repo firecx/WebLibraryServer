@@ -9,5 +9,5 @@ public class AuthorResponse {
     private Integer id;
     private String nickname;
     private String name;
-    private String surmane;
+    private String surname;
 }

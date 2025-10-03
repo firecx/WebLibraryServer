@@ -2,9 +2,9 @@ package org.firecx.server.controllers;
 
 import java.util.List;
 
-import org.firecx.server.interfaces.services.BookService;
 import org.firecx.server.models.BookResponse;
 import org.firecx.server.models.CreateBookRequest;
+import org.firecx.server.services.BookServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 public class BookController {
-    private BookService bookService;
+    private final BookServiceImpl bookService;
 
     @GetMapping(produces = "application/json")
     public List<BookResponse> findAll() {
