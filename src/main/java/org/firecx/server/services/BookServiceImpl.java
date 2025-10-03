@@ -22,7 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService{
-    private static BookRepository bookRepository;
+    private final BookRepository bookRepository;
+    private final AuthorServiceImpl authorService;
 
     @NonNull
     @Override
@@ -83,15 +84,12 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     private Book buildBookRequest(@NonNull CreateBookRequest request) {
+        Author author = authorService.findById(request.getAuthorId()).toAuthor();
         return new Book()
         .setSeries(request.getSeries())
         .setName(request.getName())
         .setVolume(request.getVolume())
-        .setAuthor(new Author()
-        .setId(request.getAuthor().getId())
-        .setSurname(request.getAuthor().getSurname())
-        .setName(request.getAuthor().getName())
-        .setNickname(request.getAuthor().getNickname()));
+        .setAuthor(author);
     }
     
     private void bookUpdate(@NonNull Book book, @NonNull CreateBookRequest request) {

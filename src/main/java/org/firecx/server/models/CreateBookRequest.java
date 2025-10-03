@@ -10,5 +10,5 @@ public class CreateBookRequest {
     private String series;
     private String name;
     private Integer volume;
-    private CreateAuthorRequest author;
+    private Integer authorId;
 }

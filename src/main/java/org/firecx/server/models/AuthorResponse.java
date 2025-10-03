@@ -1,5 +1,7 @@
 package org.firecx.server.models;
 
+import org.firecx.server.entities.Author;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -10,4 +12,12 @@ public class AuthorResponse {
     private String nickname;
     private String name;
     private String surname;
+
+    public Author toAuthor() {
+        return new Author()
+        .setId(id)
+        .setNickname(nickname)
+        .setSurname(surname)
+        .setName(name);
+    }
 }
