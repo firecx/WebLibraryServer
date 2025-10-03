@@ -2,6 +2,7 @@ package org.firecx.server.interfaces.services;
 
 import java.util.List;
 
+import org.firecx.server.entities.Author;
 import org.firecx.server.models.AuthorResponse;
 import org.firecx.server.models.CreateAuthorRequest;
 
@@ -21,4 +22,7 @@ public interface AuthorService {
     AuthorResponse update(@NonNull Integer authorId, @NonNull CreateAuthorRequest request);
 
     void delete(@NonNull Integer authorId);
+
+    @NonNull
+    Author getAuthorReference(Integer authorId);
 }

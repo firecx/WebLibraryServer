@@ -84,7 +84,7 @@ public class BookServiceImpl implements BookService{
 
     @NonNull
     private Book buildBookRequest(@NonNull CreateBookRequest request) {
-        Author author = authorService.findById(request.getAuthorId()).toAuthor();
+        Author author = authorService.getAuthorReference(request.getAuthorId());
         return new Book()
         .setSeries(request.getSeries())
         .setName(request.getName())

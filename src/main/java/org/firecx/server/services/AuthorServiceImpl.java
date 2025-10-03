@@ -65,6 +65,13 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @NonNull
+    @Override
+    @Transactional(readOnly = true)
+    public Author getAuthorReference(Integer authorId) {
+        return authorRepository.getReferenceById(authorId);
+    }
+
+    @NonNull
     private AuthorResponse buildAuthorResponse(@NonNull Author author) {
         return new AuthorResponse()
         .setId(author.getId())
