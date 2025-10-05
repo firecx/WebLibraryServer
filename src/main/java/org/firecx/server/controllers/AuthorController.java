@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping("/api/author")
+@RequestMapping("/api/authors")
 @RequiredArgsConstructor
 public class AuthorController {
     private final AuthorServiceImpl authorService;
