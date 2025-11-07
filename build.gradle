@@ -6,7 +6,7 @@ plugins {
 
 group = 'org.firecx'
 version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+description = 'Web Library Server'
 
 java {
 	toolchain {
