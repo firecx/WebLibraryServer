@@ -2,9 +2,10 @@ package org.firecx.server.controllers;
 
 import java.util.List;
 
-import org.firecx.server.models.AuthorResponse;
-import org.firecx.server.models.CreateAuthorRequest;
+import org.firecx.server.models.AuthorDTO;
 import org.firecx.server.services.AuthorServiceImpl;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,23 +27,23 @@ public class AuthorController {
     private final AuthorServiceImpl authorService;
 
     @GetMapping(produces = "application/json")
-    public List<AuthorResponse> findAll() {
+    public List<AuthorDTO> findAll() {
         return authorService.findAll();
     }
 
     @GetMapping(value = "/{authorId}", produces = "application/json")
-    public AuthorResponse findById(@PathVariable Integer authorId) {
+    public AuthorDTO findById(@PathVariable Integer authorId) {
         return authorService.findById(authorId);
     }
     
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public AuthorResponse create(@RequestBody CreateAuthorRequest request) {
-        return authorService.createAuthor(request);
+    public ResponseEntity<AuthorDTO> create(@RequestBody AuthorDTO request) {
+        return ResponseEntity.ok(authorService.createAuthor(request));
     }
 
     @PatchMapping(value = "/{authorId}", consumes = "application/json", produces = "application/json")
-    public AuthorResponse update(@PathVariable Integer authorId, @RequestBody CreateAuthorRequest request) {
-        return authorService.update(authorId, request);
+    public ResponseEntity<AuthorDTO> update(@PathVariable Integer authorId, @RequestBody AuthorDTO request) {
+        return ResponseEntity.ok(authorService.update(authorId, request));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

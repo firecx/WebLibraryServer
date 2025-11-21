@@ -2,27 +2,26 @@ package org.firecx.server.interfaces.services;
 
 import java.util.List;
 
-import org.firecx.server.entities.Author;
-import org.firecx.server.models.AuthorResponse;
-import org.firecx.server.models.CreateAuthorRequest;
+import org.firecx.server.entities.AuthorEntity;
+import org.firecx.server.models.AuthorDTO;
 
 import lombok.NonNull;
 
 public interface AuthorService {
     @NonNull
-    List<AuthorResponse> findAll();
+    List<AuthorDTO> findAll();
 
     @NonNull
-    AuthorResponse findById(@NonNull Integer authorId);
+    AuthorDTO findById(@NonNull Integer authorId);
 
     @NonNull
-    AuthorResponse createAuthor(@NonNull CreateAuthorRequest request);
+    AuthorDTO createAuthor(@NonNull AuthorDTO request);
 
     @NonNull
-    AuthorResponse update(@NonNull Integer authorId, @NonNull CreateAuthorRequest request);
+    AuthorDTO update(@NonNull Integer authorId, @NonNull AuthorDTO request);
 
     void delete(@NonNull Integer authorId);
 
     @NonNull
-    Author getAuthorReference(Integer authorId);
+    AuthorEntity getAuthorReference(Integer authorId);
 }

@@ -2,13 +2,12 @@ package org.firecx.server.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.firecx.server.entities.Author;
+import org.firecx.server.entities.AuthorEntity;
+import org.firecx.server.interfaces.mappers.AuthorMapper;
 import org.firecx.server.interfaces.repository.AuthorRepository;
 import org.firecx.server.interfaces.services.AuthorService;
-import org.firecx.server.models.AuthorResponse;
-import org.firecx.server.models.CreateAuthorRequest;
+import org.firecx.server.models.AuthorDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,75 +19,69 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService{
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
     @NonNull
     @Override
     @Transactional(readOnly = true)
-    public List<AuthorResponse> findAll() {
+    public List<AuthorDTO> findAll() {
         return authorRepository.findAll()
         .stream()
-        .map(this::buildAuthorResponse)
-        .collect(Collectors.toList());
+        .map(authorMapper::toDTO)
+        .toList();
     }
 
     @NonNull
     @Override
     @Transactional(readOnly = true)
-    public AuthorResponse findById(@NonNull Integer authorId) {
+    public AuthorDTO findById(@NonNull Integer authorId) {
         return authorRepository.findById(authorId)
-        .map(this::buildAuthorResponse)
+        .map(authorMapper::toDTO)
         .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not sound"));
     }
 
     @NonNull
     @Override
     @Transactional
-    public AuthorResponse createAuthor(@NonNull CreateAuthorRequest request) {
-        Author author = buildAuthorRequest(request);
-        return buildAuthorResponse(authorRepository.save(author));
+    public AuthorDTO createAuthor(@NonNull AuthorDTO authorDto) {
+        AuthorEntity authorEntity = authorMapper.toEntity(authorDto);
+        AuthorEntity authorSaved = authorRepository.save(authorEntity);
+        return authorMapper.toDTO(authorSaved);
     }
 
     @NonNull
     @Override
     @Transactional
-    public AuthorResponse update(@NonNull Integer authorId, @NonNull CreateAuthorRequest request) {
-        Author author = authorRepository.findById(authorId)
+    public AuthorDTO update(@NonNull Integer authorId, @NonNull AuthorDTO request) {
+        AuthorEntity authorEntity = authorRepository.findById(authorId)
         .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not sound"));
-        authorUpdate(author, request);
-        return buildAuthorResponse(authorRepository.save(author));
+        
+        authorUpdate(authorEntity, request);
+
+        AuthorEntity updatedAuthor = authorRepository.save(authorEntity);
+
+        return authorMapper.toDTO(updatedAuthor);
     }
 
     @Override
     @Transactional
     public void delete(@NonNull Integer authorId) {
+        if (!authorRepository.existsById(authorId)) {
+            throw new EntityNotFoundException("Author " + authorId + " is not sound");
+        }
         authorRepository.deleteById(authorId);
     }
 
     @NonNull
     @Override
     @Transactional(readOnly = true)
-    public Author getAuthorReference(Integer authorId) {
+    public AuthorEntity getAuthorReference(Integer authorId) {
         return authorRepository.getReferenceById(authorId);
     }
 
-    @NonNull
-    private AuthorResponse buildAuthorResponse(@NonNull Author author) {
-        return new AuthorResponse()
-        .setId(author.getId())
-        .setSurname(author.getSurname())
-        .setName(author.getName())
-        .setNickname(author.getNickname());
-    }
-
-    @NonNull
-    private Author buildAuthorRequest(@NonNull CreateAuthorRequest request) {
-        return new Author()
-        .setSurname(request.getSurname())
-        .setName(request.getName())
-        .setNickname(request.getNickname());
-    }
-
-    private void authorUpdate(@NonNull Author author, @NonNull CreateAuthorRequest request) {
-        Optional.ofNullable(request.getNickname()).map(author::setNickname);
+    private void authorUpdate(@NonNull AuthorEntity author, @NonNull AuthorDTO request) {
+        Optional.ofNullable(request.getNickname()).ifPresent(author::setNickname);
+        Optional.ofNullable(request.getName()).ifPresent(author::setName);
+        Optional.ofNullable(request.getSurname()).ifPresent(author::setSurname);
     }
 }

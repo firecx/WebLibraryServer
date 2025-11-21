@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Entity
 @Table(name = "books")
-public class Book {
+public class BookEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +41,13 @@ public class Book {
     //переделать cascade
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "authors_id", foreignKey = @ForeignKey(name = "fk_books_authors_id"))
-    private Author author;
+    private AuthorEntity author;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
+        BookEntity book = (BookEntity) o;
         return (series + name + volume.toString()).equals(book.series + book.name + book.volume.toString());
     }
 

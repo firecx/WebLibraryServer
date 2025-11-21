@@ -5,10 +5,9 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class CreateBookRequest {
+public class AuthorDTO {
     private Integer id;
-    private String series;
+    private String nickname;
     private String name;
-    private Integer volume;
-    private Integer authorId;
+    private String surname;
 }

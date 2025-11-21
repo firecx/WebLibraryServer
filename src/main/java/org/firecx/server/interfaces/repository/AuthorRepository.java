@@ -1,6 +1,6 @@
 package org.firecx.server.interfaces.repository;
 
-import org.firecx.server.entities.Author;
+import org.firecx.server.entities.AuthorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AuthorRepository extends JpaRepository<Author, Integer> {}
+public interface AuthorRepository extends JpaRepository<AuthorEntity, Integer> {}

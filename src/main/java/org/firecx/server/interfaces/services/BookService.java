@@ -2,24 +2,23 @@ package org.firecx.server.interfaces.services;
 
 import java.util.List;
 
-import org.firecx.server.models.BookResponse;
-import org.firecx.server.models.CreateBookRequest;
+import org.firecx.server.models.BookDTO;
 
 import lombok.NonNull;
 
 public interface BookService {
     
     @NonNull
-    List<BookResponse> findAll();
+    List<BookDTO> findAll();
 
     @NonNull
-    BookResponse findById(@NonNull Integer bookId);
+    BookDTO findById(@NonNull Integer bookId);
 
     @NonNull
-    BookResponse createBook(@NonNull CreateBookRequest request);
+    BookDTO createBook(@NonNull BookDTO request);
 
     @NonNull
-    BookResponse update(@NonNull Integer bookId, @NonNull CreateBookRequest request);
+    BookDTO update(@NonNull Integer bookId, @NonNull BookDTO request);
 
     void delete(@NonNull Integer bookId);
 }

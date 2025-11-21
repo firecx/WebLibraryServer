@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.firecx.server.entities.Author;
-import org.firecx.server.entities.Book;
+import org.firecx.server.entities.AuthorEntity;
+import org.firecx.server.entities.BookEntity;
+import org.firecx.server.interfaces.mappers.AuthorMapper;
+import org.firecx.server.interfaces.mappers.BookMapper;
 import org.firecx.server.interfaces.repository.BookRepository;
 import org.firecx.server.interfaces.services.BookService;
-import org.firecx.server.models.AuthorResponse;
-import org.firecx.server.models.BookResponse;
-import org.firecx.server.models.CreateBookRequest;
+import org.firecx.server.models.BookDTO;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,78 +23,67 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService{
     private final BookRepository bookRepository;
-    private final AuthorServiceImpl authorService;
+    private final BookMapper bookMapper;
+    private final AuthorMapper authorMapper;
 
     @NonNull
     @Override
     @Transactional(readOnly = true)
-    public List<BookResponse> findAll() {
+    public List<BookDTO> findAll() {
         return bookRepository.findAll()
         .stream()
-        .map(this::buildBookResponse)
-        .collect(Collectors.toList());
+        .map(bookMapper::toDTO)
+        .toList();
     }
 
     @NonNull
     @Override
     @Transactional(readOnly = true)
-    public BookResponse findById(@NonNull Integer bookId) {
+    public BookDTO findById(@NonNull Integer bookId) {
         return bookRepository.findById(bookId)
-        .map(this::buildBookResponse)
+        .map(bookMapper::toDTO)
         .orElseThrow(() -> new EntityNotFoundException("Book "+ bookId + " is not found"));
     }
 
     @NonNull
     @Override
     @Transactional
-    public BookResponse createBook(@NonNull CreateBookRequest request) {
-        Book book = buildBookRequest(request);
-        return buildBookResponse(bookRepository.save(book));
+    public BookDTO createBook(@NonNull BookDTO bookDto) {
+        BookEntity bookEntity = bookMapper.toEntity(bookDto);
+        BookEntity bookSaved = bookRepository.save(bookEntity);
+        return bookMapper.toDTO(bookSaved);
     }
 
     @NonNull
     @Override
     @Transactional
-    public BookResponse update(@NonNull Integer bookId, @NonNull CreateBookRequest request) {
-        Book book = bookRepository.findById(bookId)
+    public BookDTO update(@NonNull Integer bookId, @NonNull BookDTO request) {
+        BookEntity bookEntity = bookRepository.findById(bookId)
         .orElseThrow(() -> new EntityNotFoundException("Book " + bookId + " is not found"));
-        bookUpdate(book, request);
-        return buildBookResponse(bookRepository.save(book));
+        bookUpdate(bookEntity, request);
+        
+        BookEntity updatedBook = bookRepository.save(bookEntity);
+
+        return bookMapper.toDTO(updatedBook);
     }
 
     @Override
     @Transactional
     public void delete(@NonNull Integer bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            throw new EntityNotFoundException("Book " + bookId + " is not sound");
+        }
         bookRepository.deleteById(bookId);
     }
-
-    @NonNull
-    private BookResponse buildBookResponse(@NonNull Book book) {
-        return new BookResponse()
-        .setId(book.getId())
-        .setSeries(book.getSeries())
-        .setName(book.getName())
-        .setVolume(book.getVolume())
-        .setAuthor(new AuthorResponse()
-        .setId(book.getAuthor().getId())
-        .setSurname(book.getAuthor().getSurname())
-        .setName(book.getAuthor().getName())
-        .setNickname(book.getAuthor().getNickname()));
-    }
-
-    @NonNull
-    private Book buildBookRequest(@NonNull CreateBookRequest request) {
-        Author author = authorService.getAuthorReference(request.getAuthorId());
-        return new Book()
-        .setSeries(request.getSeries())
-        .setName(request.getName())
-        .setVolume(request.getVolume())
-        .setAuthor(author);
-    }
     
-    private void bookUpdate(@NonNull Book book, @NonNull CreateBookRequest request) {
-        Optional.ofNullable(request.getSeries()).map(book::setSeries);
-        Optional.ofNullable(request.getName()).map(book::setName);
-        Optional.ofNullable(request.getVolume()).map(book::setVolume);
+    private void bookUpdate(@NonNull BookEntity book, @NonNull BookDTO request) {
+        Optional.ofNullable(request.getSeries()).ifPresent(book::setSeries);
+        Optional.ofNullable(request.getName()).ifPresent(book::setName);
+        Optional.ofNullable(request.getVolume()).ifPresent(book::setVolume);
+        
+        if (request.getAuthor() != null) {
+            AuthorEntity authorEntity = authorMapper.toEntity(request.getAuthor());
+            book.setAuthor(authorEntity);
+        }
     }
 }
