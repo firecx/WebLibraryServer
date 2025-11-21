@@ -27,3 +27,9 @@ services:
   
 volumes:
   db-data:
+    name: weblibrary-db-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: D:/WebLibraryServer/db-data

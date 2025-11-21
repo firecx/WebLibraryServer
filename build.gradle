@@ -39,11 +39,7 @@ dependencies {
 
 	runtimeOnly 'org.postgresql:postgresql'
 
-	compileOnly 'org.mapstruct:mapstruct:1.5.5.Final'
-	annotationProcessor 'org.mapstruct:mapstruct:1.5.5.Final'
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
