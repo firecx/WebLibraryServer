@@ -38,8 +38,7 @@ public class BookEntity {
     @Column(name = "volume", nullable = false, unique = false)
     private Integer volume;
 
-    //переделать cascade
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authors_id", foreignKey = @ForeignKey(name = "fk_books_authors_id"))
     private AuthorEntity author;
 
