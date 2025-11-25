@@ -7,6 +7,7 @@ import org.firecx.server.entities.AuthorEntity;
 import org.firecx.server.entities.BookEntity;
 import org.firecx.server.interfaces.mappers.AuthorMapper;
 import org.firecx.server.interfaces.mappers.BookMapper;
+import org.firecx.server.interfaces.repository.AuthorRepository;
 import org.firecx.server.interfaces.repository.BookRepository;
 import org.firecx.server.interfaces.services.IBookService;
 import org.firecx.server.models.BookDTO;
@@ -24,6 +25,7 @@ public class BookService implements IBookService{
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;
+    private final AuthorRepository authorRepository;
 
     @NonNull
     @Override
@@ -48,8 +50,17 @@ public class BookService implements IBookService{
     @Override
     @Transactional
     public BookDTO createBook(@NonNull BookDTO bookDto) {
+        if (bookDto.getAuthor().getNickname() == null) {
+            throw new IllegalArgumentException("Author nickname cannot be null");
+        }
+
+        AuthorEntity author = authorRepository.findByNickname(bookDto.getAuthor().getNickname())
+        .orElseThrow(() -> new EntityNotFoundException("Author " + bookDto.getAuthor().getNickname() +" is not found"));
+        
         BookEntity bookEntity = bookMapper.toEntity(bookDto);
+        bookEntity.setAuthor(author);
         BookEntity bookSaved = bookRepository.save(bookEntity);
+        
         return bookMapper.toDTO(bookSaved);
     }
 
