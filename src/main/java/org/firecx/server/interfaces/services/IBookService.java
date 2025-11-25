@@ -6,7 +6,7 @@ import org.firecx.server.models.BookDTO;
 
 import lombok.NonNull;
 
-public interface BookService {
+public interface IBookService {
     
     @NonNull
     List<BookDTO> findAll();

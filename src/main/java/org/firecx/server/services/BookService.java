@@ -8,7 +8,7 @@ import org.firecx.server.entities.BookEntity;
 import org.firecx.server.interfaces.mappers.AuthorMapper;
 import org.firecx.server.interfaces.mappers.BookMapper;
 import org.firecx.server.interfaces.repository.BookRepository;
-import org.firecx.server.interfaces.services.BookService;
+import org.firecx.server.interfaces.services.IBookService;
 import org.firecx.server.models.BookDTO;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService{
+public class BookService implements IBookService{
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorMapper authorMapper;

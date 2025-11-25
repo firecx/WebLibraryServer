@@ -3,7 +3,7 @@ package org.firecx.server.controllers;
 import java.util.List;
 
 import org.firecx.server.models.BookDTO;
-import org.firecx.server.services.BookServiceImpl;
+import org.firecx.server.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 public class BookController {
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
     @GetMapping(produces = "application/json")
     public List<BookDTO> findAll() {

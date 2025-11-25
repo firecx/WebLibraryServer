@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.firecx.server.entities.AuthorEntity;
 import org.firecx.server.interfaces.mappers.AuthorMapper;
 import org.firecx.server.interfaces.repository.AuthorRepository;
-import org.firecx.server.interfaces.services.AuthorService;
+import org.firecx.server.interfaces.services.IAuthorService;
 import org.firecx.server.models.AuthorDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorServiceImpl implements AuthorService{
+public class AuthorService implements IAuthorService{
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
 

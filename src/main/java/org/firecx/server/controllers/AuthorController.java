@@ -3,7 +3,7 @@ package org.firecx.server.controllers;
 import java.util.List;
 
 import org.firecx.server.models.AuthorDTO;
-import org.firecx.server.services.AuthorServiceImpl;
+import org.firecx.server.services.AuthorService;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/authors")
 @RequiredArgsConstructor
 public class AuthorController {
-    private final AuthorServiceImpl authorService;
+    private final AuthorService authorService;
 
     @GetMapping(produces = "application/json")
     public List<AuthorDTO> findAll() {

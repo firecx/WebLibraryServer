@@ -7,7 +7,7 @@ import org.firecx.server.models.AuthorDTO;
 
 import lombok.NonNull;
 
-public interface AuthorService {
+public interface IAuthorService {
     @NonNull
     List<AuthorDTO> findAll();
 
