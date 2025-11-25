@@ -15,6 +15,9 @@ public interface IAuthorService {
     AuthorDTO findById(@NonNull Integer authorId);
 
     @NonNull
+    public AuthorDTO findByNickname(@NonNull String nickname);
+
+    @NonNull
     AuthorDTO createAuthor(@NonNull AuthorDTO request);
 
     @NonNull

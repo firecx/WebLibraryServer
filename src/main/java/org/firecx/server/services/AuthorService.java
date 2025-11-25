@@ -37,7 +37,16 @@ public class AuthorService implements IAuthorService{
     public AuthorDTO findById(@NonNull Integer authorId) {
         return authorRepository.findById(authorId)
         .map(authorMapper::toDTO)
-        .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not sound"));
+        .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not found"));
+    }
+
+    @NonNull
+    @Override
+    @Transactional(readOnly = true)
+    public AuthorDTO findByNickname(@NonNull String nickname) {
+        return authorRepository.findByNickname(nickname)
+        .map(authorMapper::toDTO)
+        .orElseThrow(() -> new EntityNotFoundException("Author " + nickname + " is not found"));
     }
 
     @NonNull
