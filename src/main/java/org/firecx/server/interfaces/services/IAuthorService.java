@@ -21,7 +21,7 @@ public interface IAuthorService {
     AuthorDTO createAuthor(@NonNull AuthorDTO request);
 
     @NonNull
-    AuthorDTO update(@NonNull Integer authorId, @NonNull AuthorDTO request);
+    AuthorDTO update(@NonNull AuthorDTO request);
 
     void delete(@NonNull Integer authorId);
 

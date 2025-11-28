@@ -40,19 +40,4 @@ public class AuthorEntity {
         AuthorEntity author = (AuthorEntity) o;
         return nickname.equals(author.nickname);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nickname);
-    }
-
-    @Override
-    public String toString() {
-        return "Author{"
-        + "id=" + id
-        + ", nickname=" + nickname
-        + ", name=" + name
-        + ", surname=" + surname
-        + "}";
-    }
 }

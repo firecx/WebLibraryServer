@@ -53,6 +53,14 @@ public class AuthorService implements IAuthorService{
     @Override
     @Transactional
     public AuthorDTO createAuthor(@NonNull AuthorDTO authorDto) {
+        if (authorDto.getNickname() == null || authorDto.getNickname().isBlank()) {
+            throw new IllegalArgumentException("Author nickname cannot be null or blank");
+        }
+
+        if (authorRepository.findByNickname(authorDto.getNickname()).isPresent()) {
+            throw new IllegalArgumentException("Author already exists");
+        }
+
         AuthorEntity authorEntity = authorMapper.toEntity(authorDto);
         AuthorEntity authorSaved = authorRepository.save(authorEntity);
         return authorMapper.toDTO(authorSaved);
@@ -61,9 +69,9 @@ public class AuthorService implements IAuthorService{
     @NonNull
     @Override
     @Transactional
-    public AuthorDTO update(@NonNull Integer authorId, @NonNull AuthorDTO request) {
-        AuthorEntity authorEntity = authorRepository.findById(authorId)
-        .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not sound"));
+    public AuthorDTO update(@NonNull AuthorDTO request) {
+        AuthorEntity authorEntity = authorRepository.findById(request.getId())
+        .orElseThrow(() -> new EntityNotFoundException("Author " + "(" + request.getId() +")" + request.getNickname() + " is not sound"));
         
         authorUpdate(authorEntity, request);
 

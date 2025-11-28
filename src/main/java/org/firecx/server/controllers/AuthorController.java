@@ -42,8 +42,8 @@ public class AuthorController {
     }
 
     @PatchMapping(value = "/{authorId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<AuthorDTO> update(@PathVariable Integer authorId, @RequestBody AuthorDTO request) {
-        return ResponseEntity.ok(authorService.update(authorId, request));
+    public ResponseEntity<AuthorDTO> update(@RequestBody AuthorDTO request) {
+        return ResponseEntity.ok(authorService.update(request));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
