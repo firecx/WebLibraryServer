@@ -50,13 +50,24 @@ public class BookService implements IBookService{
     @Override
     @Transactional
     public BookDTO createBook(@NonNull BookDTO bookDto) {
-        if (bookDto.getAuthor().getNickname() == null) {
-            throw new IllegalArgumentException("Author nickname cannot be null");
+        if (bookDto.getAuthor() == null) {
+            throw new IllegalArgumentException("Author cannot be null");
         }
 
-        AuthorEntity author = authorRepository.findByNickname(bookDto.getAuthor().getNickname())
-        .orElseThrow(() -> new EntityNotFoundException("Author " + bookDto.getAuthor().getNickname() +" is not found"));
+        String nickname = bookDto.getAuthor().getNickname();
+        if (nickname == null || nickname.isBlank()) {
+            throw new IllegalArgumentException("Author nickname cannot be null or blank");
+        }
+
+        AuthorEntity author = authorRepository.findByNickname(nickname)
+        .orElseThrow(() -> new EntityNotFoundException("Author " + nickname + " is not found"));
         
+        // Check if the book already exists (by series + name + volume)
+        if (bookRepository.findBySeriesAndNameAndVolume(
+            bookDto.getSeries(), bookDto.getName(), bookDto.getVolume()).isPresent()) {
+            throw new IllegalArgumentException("Book already exists");
+        }
+
         BookEntity bookEntity = bookMapper.toEntity(bookDto);
         bookEntity.setAuthor(author);
         BookEntity bookSaved = bookRepository.save(bookEntity);
@@ -67,9 +78,9 @@ public class BookService implements IBookService{
     @NonNull
     @Override
     @Transactional
-    public BookDTO update(@NonNull Integer bookId, @NonNull BookDTO request) {
-        BookEntity bookEntity = bookRepository.findById(bookId)
-        .orElseThrow(() -> new EntityNotFoundException("Book " + bookId + " is not found"));
+    public BookDTO update(@NonNull BookDTO request) {
+        BookEntity bookEntity = bookRepository.findById(request.getId())
+        .orElseThrow(() -> new EntityNotFoundException("Book " + request.getId() + " is not found"));
         bookUpdate(bookEntity, request);
         
         BookEntity updatedBook = bookRepository.save(bookEntity);

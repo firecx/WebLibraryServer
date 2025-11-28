@@ -18,7 +18,7 @@ public interface IBookService {
     BookDTO createBook(@NonNull BookDTO request);
 
     @NonNull
-    BookDTO update(@NonNull Integer bookId, @NonNull BookDTO request);
+    BookDTO update(@NonNull BookDTO request);
 
     void delete(@NonNull Integer bookId);
 }

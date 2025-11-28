@@ -2,7 +2,6 @@ package org.firecx.server.entities;
 
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,27 +40,4 @@ public class BookEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authors_id", foreignKey = @ForeignKey(name = "fk_books_authors_id"))
     private AuthorEntity author;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookEntity book = (BookEntity) o;
-        return (series + name + volume.toString()).equals(book.series + book.name + book.volume.toString());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(series + name + volume.toString());
-    }
-
-    @Override
-    public String toString() {
-        return "Book{"
-        + "id=" + id
-        + ", series=" + series
-        + ", name=" + name
-        + ", volume=" + volume.toString()
-        + "}";
-    }
 }

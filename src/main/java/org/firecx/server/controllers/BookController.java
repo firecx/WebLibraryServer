@@ -40,8 +40,8 @@ public class BookController {
     }
 
     @PatchMapping(value = "/{bookId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<BookDTO> update(@PathVariable Integer bookId, @RequestBody BookDTO request) {
-        return ResponseEntity.ok(bookService.update(bookId, request));
+    public ResponseEntity<BookDTO> update(@RequestBody BookDTO request) {
+        return ResponseEntity.ok(bookService.update(request));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
