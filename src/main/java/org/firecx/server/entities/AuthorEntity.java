@@ -6,12 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @Entity
 @Table(name = "authors")
@@ -30,12 +28,4 @@ public class AuthorEntity {
 
     @Column(name = "surname", nullable = true, unique = false)
     private String surname;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AuthorEntity author = (AuthorEntity) o;
-        return nickname.equals(author.nickname);
-    }
 }
