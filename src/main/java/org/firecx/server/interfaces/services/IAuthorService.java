@@ -8,23 +8,17 @@ import org.firecx.server.models.AuthorDTO;
 import lombok.NonNull;
 
 public interface IAuthorService {
-    @NonNull
     List<AuthorDTO> findAll();
 
-    @NonNull
     AuthorDTO findById(@NonNull Integer authorId);
 
-    @NonNull
-    public AuthorDTO findByNickname(@NonNull String nickname);
+    AuthorDTO findByNickname(@NonNull String nickname);
 
-    @NonNull
     AuthorDTO createAuthor(@NonNull AuthorDTO request);
 
-    @NonNull
     AuthorDTO update(@NonNull AuthorDTO request);
 
     void delete(@NonNull Integer authorId);
 
-    @NonNull
     AuthorEntity getAuthorReference(Integer authorId);
 }

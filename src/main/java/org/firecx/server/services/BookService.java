@@ -27,7 +27,6 @@ public class BookService implements IBookService{
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public List<BookDTO> findAll() {
@@ -37,7 +36,6 @@ public class BookService implements IBookService{
         .toList();
     }
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public BookDTO findById(@NonNull Integer bookId) {
@@ -46,7 +44,6 @@ public class BookService implements IBookService{
         .orElseThrow(() -> new EntityNotFoundException("Book "+ bookId + " is not found"));
     }
 
-    @NonNull
     @Override
     @Transactional
     public BookDTO createBook(@NonNull BookDTO bookDto) {
@@ -75,7 +72,6 @@ public class BookService implements IBookService{
         return bookMapper.toDTO(bookSaved);
     }
 
-    @NonNull
     @Override
     @Transactional
     public BookDTO update(@NonNull BookDTO request) {

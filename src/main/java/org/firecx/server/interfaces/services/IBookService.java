@@ -8,16 +8,12 @@ import lombok.NonNull;
 
 public interface IBookService {
     
-    @NonNull
     List<BookDTO> findAll();
 
-    @NonNull
     BookDTO findById(@NonNull Integer bookId);
 
-    @NonNull
     BookDTO createBook(@NonNull BookDTO request);
 
-    @NonNull
     BookDTO update(@NonNull BookDTO request);
 
     void delete(@NonNull Integer bookId);

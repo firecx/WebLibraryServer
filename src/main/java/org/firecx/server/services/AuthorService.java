@@ -21,7 +21,6 @@ public class AuthorService implements IAuthorService{
     private final AuthorRepository authorRepository;
     private final AuthorMapper authorMapper;
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public List<AuthorDTO> findAll() {
@@ -31,7 +30,6 @@ public class AuthorService implements IAuthorService{
         .toList();
     }
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public AuthorDTO findById(@NonNull Integer authorId) {
@@ -40,7 +38,6 @@ public class AuthorService implements IAuthorService{
         .orElseThrow(() -> new EntityNotFoundException("Author " + authorId + " is not found"));
     }
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public AuthorDTO findByNickname(@NonNull String nickname) {
@@ -49,7 +46,6 @@ public class AuthorService implements IAuthorService{
         .orElseThrow(() -> new EntityNotFoundException("Author " + nickname + " is not found"));
     }
 
-    @NonNull
     @Override
     @Transactional
     public AuthorDTO createAuthor(@NonNull AuthorDTO authorDto) {
@@ -66,7 +62,6 @@ public class AuthorService implements IAuthorService{
         return authorMapper.toDTO(authorSaved);
     }
 
-    @NonNull
     @Override
     @Transactional
     public AuthorDTO update(@NonNull AuthorDTO request) {
@@ -89,7 +84,6 @@ public class AuthorService implements IAuthorService{
         authorRepository.deleteById(authorId);
     }
 
-    @NonNull
     @Override
     @Transactional(readOnly = true)
     public AuthorEntity getAuthorReference(Integer authorId) {
