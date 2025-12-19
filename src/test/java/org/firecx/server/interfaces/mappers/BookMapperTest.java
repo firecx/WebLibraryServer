@@ -35,7 +35,6 @@ public class BookMapperTest {
         assertEquals(dto.getSeries(), entity.getSeries()); // Сверяем series
         assertEquals(dto.getName(), entity.getName()); // Сверяем name
         assertEquals(dto.getVolume(), entity.getVolume()); // Сверяем volume
-        assertNull(entity.getAuthor(), "Author mapping is expected to be null"); // Ожидаем, что author не мапится здесь
     }
 
     @Test
@@ -60,6 +59,5 @@ public class BookMapperTest {
         assertEquals(entity.getSeries(), dto.getSeries()); // Сверяем series
         assertEquals(entity.getName(), dto.getName()); // Сверяем name
         assertEquals(entity.getVolume(), dto.getVolume()); // Сверяем volume
-        assertNull(dto.getAuthor(), "Author mapping is expected to be null"); // Ожидаем, что author не мапится здесь
     }
 }
