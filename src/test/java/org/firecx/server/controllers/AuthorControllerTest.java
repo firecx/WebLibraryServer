@@ -25,17 +25,24 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthorController.class)
 @Import(AuthorControllerTest.TestConfig.class)
+// Тестовый класс для контроллера `AuthorController`.
+// Содержит юнит-тесты, использующие MockMvc для вызова HTTP-эндпоинтов.
 public class AuthorControllerTest {
 
+    // MockMvc используется для имитации HTTP-запросов к контроллеру
     @Autowired
     private MockMvc mockMvc;
 
+    // ObjectMapper используется для сериализации/десериализации JSON в тестах
     @Autowired
     private ObjectMapper objectMapper;
 
+    // Мок-сервис авторов, поведение которого настраивается в тестах
     @Autowired
     private AuthorService authorService;
 
+    // Тест: проверяет, что GET /api/authors возвращает список авторов в формате JSON
+    // Подготавливает пример объекта AuthorDTO, настраивает мок-сервис и проверяет ответ
     @Test
     void findAll_returnsListOfAuthors() throws Exception {
         AuthorDTO author = new AuthorDTO()
@@ -54,6 +61,8 @@ public class AuthorControllerTest {
             .andExpect(jsonPath("$[0].surname").value("Doe"));
     }
 
+    // Тест: проверяет создание автора через POST /api/authors
+    // Отправляет JSON с данными автора и ожидает в ответе объект с установленным id
     @Test
     void create_returnsCreatedAuthor() throws Exception {
         AuthorDTO request = new AuthorDTO()
@@ -80,7 +89,9 @@ public class AuthorControllerTest {
     }
 
     @TestConfiguration
+    // Внутренняя тестовая конфигурация: предоставляет мок-реализацию `AuthorService`
     static class TestConfig {
+        // Регистрируем бин `AuthorService`, возвращающий Mockito-мок
         @Bean
         public AuthorService authorService() {
             return Mockito.mock(AuthorService.class);

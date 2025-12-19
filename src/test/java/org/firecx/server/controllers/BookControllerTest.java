@@ -1,32 +1,32 @@
-package org.firecx.server.controllers; // Пакет, в котором находится этот тестовый класс (организация кода)
+package org.firecx.server.controllers;
 
-import static org.mockito.ArgumentMatchers.any; // Статический импорт матчера any() из Mockito
-import static org.mockito.Mockito.when; // Статический импорт when() для задания поведения моков
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get; // Билдер GET-запроса для MockMvc
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post; // Билдер POST-запроса для MockMvc
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath; // Проверки JSON-путей в ответе
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status; // Проверки HTTP-статуса в ответе
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List; // Интерфейс списка из стандартной библиотеки Java
+import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper; // Jackson ObjectMapper для JSON-сериализации
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.firecx.server.models.AuthorDTO; // DTO для автора — используется в тестовых данных
-import org.firecx.server.models.BookDTO; // DTO для книги — используется в тестовых данных
-import org.firecx.server.services.BookService; // Сервис для работы с книгами — будет мокироваться
-import org.junit.jupiter.api.Test; // Аннотация @Test из JUnit 5
-import org.springframework.beans.factory.annotation.Autowired; // Для внедрения зависимостей в тесте
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest; // Настройка тестового контекста MVC
-import org.springframework.context.annotation.Import; // Позволяет импортировать дополнительную конфигурацию в тест
-import org.springframework.boot.test.context.TestConfiguration; // Конфигурация, специфичная для тестов
-import org.springframework.context.annotation.Bean; // Для объявления бина внутри TestConfiguration
-import org.mockito.Mockito; // Класс Mockito для создания моков
-import org.springframework.http.MediaType; // Типы содержимого (например, application/json)
-import org.springframework.test.web.servlet.MockMvc; // Инструмент для имитации HTTP-запросов к контроллерам
+import org.firecx.server.models.AuthorDTO;
+import org.firecx.server.models.BookDTO;
+import org.firecx.server.services.BookService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.mockito.Mockito;
+import org.springframework.http.MediaType; 
+import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(BookController.class) // Загружает только слой веб (контроллер) для тестирования `BookController`
 @Import(BookControllerTest.TestConfig.class) // Импортируем тестовую конфигурацию, определённую ниже
-public class BookControllerTest { // Тестовый класс для контроллера книг
+public class BookControllerTest {
 
     @Autowired // Внедряется MockMvc — позволяет выполнять HTTP-запросы в тестах
     private MockMvc mockMvc;
