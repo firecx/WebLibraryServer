@@ -58,7 +58,7 @@ public class AuthorServiceTest {
         assertEquals(2, result.size()); // Проверяем, что возвращено два DTO
         assertEquals("nick1", result.get(0).getNickname()); // Проверяем содержимое первого DTO
         assertEquals("nick2", result.get(1).getNickname()); // Проверяем содержимое второго DTO
-    } // Конец теста findAll
+    }
 
     @Test // Тест для проверки findById в успешном случае
     public void findById_found_returnsDTO() {
