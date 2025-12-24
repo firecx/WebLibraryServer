@@ -79,6 +79,13 @@ public class AuthorServiceTest {
         assertEquals("nick10", result.getNickname()); // Проверяем nickname в результате
     }
 
+    @Test // Негативный сценарий: findById — автора нет, ожидаем EntityNotFoundException
+    public void findById_notFound_throwsEntityNotFoundException() {
+        when(authorRepository.findById(123)).thenReturn(Optional.empty()); // Пустой Optional
+
+        assertThrows(EntityNotFoundException.class, () -> authorService.findById(123));
+    }
+
     @Test // Тест для проверки создания автора
     public void createAuthor_valid_savesAndReturnsDTO() {
         AuthorDTO request = new AuthorDTO(); // Создаём DTO запроса
@@ -105,6 +112,24 @@ public class AuthorServiceTest {
         assertEquals(5, result.getId()); // Убедимся, что вернулся DTO с ожидаемым id
         assertEquals("newNick", result.getNickname()); // Проверяем nickname в возвращённом DTO
     } // Конец теста createAuthor
+
+    @Test // Негативный сценарий: создание автора с дубликатом nickname — IllegalArgumentException
+    public void createAuthor_duplicateNickname_throwsIllegalArgumentException() {
+        AuthorDTO request = new AuthorDTO();
+        request.setNickname("dup");
+
+        when(authorRepository.findByNickname("dup")).thenReturn(Optional.of(new AuthorEntity()));
+
+        assertThrows(IllegalArgumentException.class, () -> authorService.createAuthor(request));
+    }
+
+    @Test // Негативный сценарий: создание автора с пустым/нулевым nickname — IllegalArgumentException
+    public void createAuthor_blankNickname_throwsIllegalArgumentException() {
+        AuthorDTO request = new AuthorDTO();
+        request.setNickname(""); // пустой никнейм
+
+        assertThrows(IllegalArgumentException.class, () -> authorService.createAuthor(request));
+    }
 
     @Test // Тест для проверки update метода
     public void update_existing_updatesAndReturnsDTO() {
@@ -133,6 +158,17 @@ public class AuthorServiceTest {
         assertEquals(7, result.getId()); // Проверяем id результата
         assertEquals("updNick", result.getNickname()); // Проверяем, что nickname обновлён
     } 
+
+    @Test // Негативный сценарий: обновление несуществующего автора — EntityNotFoundException
+    public void update_notExisting_throwsEntityNotFoundException() {
+        AuthorDTO request = new AuthorDTO();
+        request.setId(777);
+        request.setNickname("upd");
+
+        when(authorRepository.findById(777)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> authorService.update(request));
+    }
 
     @Test // Тест для проверки удаления несуществующего автора вызывает исключение
     public void delete_nonExisting_throwsEntityNotFoundException() {

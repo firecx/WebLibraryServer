@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.BeforeEach;
 
 @WebMvcTest(AuthorController.class)
 @Import(AuthorControllerTest.TestConfig.class)
@@ -40,6 +41,12 @@ public class AuthorControllerTest {
     // Мок-сервис авторов, поведение которого настраивается в тестах
     @Autowired
     private AuthorService authorService;
+
+    // Очищаем состояние мока перед каждым тестом для независимости тестов
+    @BeforeEach
+    void setUp() {
+        Mockito.reset(authorService);
+    }
 
     // Тест: проверяет, что GET /api/authors возвращает список авторов в формате JSON
     // Подготавливает пример объекта AuthorDTO, настраивает мок-сервис и проверяет ответ
@@ -86,6 +93,15 @@ public class AuthorControllerTest {
             .andExpect(jsonPath("$.nickname").value("nick"))
             .andExpect(jsonPath("$.name").value("John"))
             .andExpect(jsonPath("$.surname").value("Doe"));
+    }
+
+    @Test
+    // Негативный сценарий: невалидный JSON в теле запроса — ожидаем 400 Bad Request (ошибка парсинга)
+    void create_withMalformedJson_returnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/authors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ invalid json }"))
+            .andExpect(status().isBadRequest());
     }
 
     @TestConfiguration

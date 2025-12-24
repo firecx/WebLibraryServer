@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType; 
 import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.BeforeEach;
 
 @WebMvcTest(BookController.class) // Загружает только слой веб (контроллер) для тестирования `BookController`
 @Import(BookControllerTest.TestConfig.class) // Импортируем тестовую конфигурацию, определённую ниже
@@ -36,6 +37,12 @@ public class BookControllerTest {
 
     @Autowired // Внедряется BookService — в тесте это мок из TestConfig
     private BookService bookService;
+
+    @BeforeEach // Метод запускается перед каждым тестом
+    void setUp() {
+        // Сбрасываем состояние мока перед каждым тестом для независимости
+        Mockito.reset(bookService);
+    }
 
     @Test // Тестирование сценария получения списка всех книг
     void findAll_returnsListOfBooks() throws Exception {
@@ -77,6 +84,14 @@ public class BookControllerTest {
             .andExpect(status().isOk()) // Ожидаем 200 OK (реализация теста предполагает такой ответ)
             .andExpect(jsonPath("$.id").value(42)) // Проверяем, что в теле ответа id = 42
             .andExpect(jsonPath("$.name").value("N")); // Проверяем, что в теле ответа name = "N"
+    }
+
+    @Test // Негативный сценарий: невалидный JSON в теле — ожидаем 400 Bad Request
+    void create_withMalformedJson_returnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ invalid json }"))
+            .andExpect(status().isBadRequest());
     }
 
     @TestConfiguration // Внутренний класс с конфигурацией бинов для тестового контекста

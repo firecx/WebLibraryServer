@@ -90,6 +90,13 @@ public class BookServiceTest {
     }
 
     @Test
+    public void findById_notFound_throwsEntityNotFoundException() {
+        when(bookRepository.findById(404)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> bookService.findById(404));
+    }
+
+    @Test
     public void createBook_valid_savesAndReturnsDTO() {
         BookDTO request = new BookDTO();
         request.setSeries("S");
@@ -143,6 +150,30 @@ public class BookServiceTest {
     }
 
     @Test
+    public void createBook_blankAuthorNickname_throwsIllegalArgumentException() {
+        BookDTO request = new BookDTO();
+        request.setName("N");
+        request.setAuthor(new org.firecx.server.models.AuthorDTO().setNickname("")); // пустой ник
+
+        assertThrows(IllegalArgumentException.class, () -> bookService.createBook(request));
+    }
+
+    @Test
+    public void createBook_authorNotFound_throwsEntityNotFoundException() {
+        BookDTO request = new BookDTO();
+        request.setSeries("S");
+        request.setName("N");
+        request.setVolume(1);
+        AuthorDTO authorDto = new AuthorDTO();
+        authorDto.setNickname("unknown");
+        request.setAuthor(authorDto);
+
+        when(authorRepository.findByNickname("unknown")).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> bookService.createBook(request));
+    }
+
+    @Test
     public void createBook_existing_throwsIllegalArgumentException() {
         BookDTO request = new BookDTO();
         request.setSeries("S");
@@ -189,6 +220,17 @@ public class BookServiceTest {
 
         assertEquals(7, result.getId());
         assertEquals("updName", result.getName());
+    }
+
+    @Test
+    public void update_notExisting_throwsEntityNotFoundException() {
+        BookDTO request = new BookDTO();
+        request.setId(999);
+        request.setName("upd");
+
+        when(bookRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> bookService.update(request));
     }
 
     @Test
