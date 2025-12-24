@@ -23,24 +23,34 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import jakarta.persistence.EntityNotFoundException;
 
+// Тестовый класс для сервиса книг
+@ExtendWith(MockitoExtension.class)
+// Тестовый класс для сервиса книг
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
 
+    // Мок репозитория книг
     @Mock
     private BookRepository bookRepository;
 
+    // Мок маппера для преобразования BookEntity <-> BookDTO
     @Mock
     private BookMapper bookMapper;
 
+    // Мок маппера для преобразования AuthorEntity <-> AuthorDTO
     @Mock
     private AuthorMapper authorMapper;
 
+    // Мок репозитория авторов
     @Mock
     private AuthorRepository authorRepository;
 
+    // Тестируемый сервис книг с инъецированными мока
+    // Тестируемый сервис книг с инъецированными мока
     @InjectMocks
     private BookService bookService;
 
+    // Тест: получение всех книг должно вернуть маппированные DTO
     @Test
     public void findAll_returnsMappedDTOs() {
         BookEntity e1 = new BookEntity();
@@ -70,6 +80,7 @@ public class BookServiceTest {
         assertEquals("Name2", result.get(1).getName());
     }
 
+    // Тест: поиск существующей книги по ID должен вернуть DTO
     @Test
     public void findById_found_returnsDTO() {
         BookEntity e = new BookEntity();
@@ -89,6 +100,7 @@ public class BookServiceTest {
         assertEquals("Book10", result.getName());
     }
 
+    // Тест: поиск несуществующей книги должен выбросить исключение EntityNotFoundException
     @Test
     public void findById_notFound_throwsEntityNotFoundException() {
         when(bookRepository.findById(404)).thenReturn(Optional.empty());
@@ -96,6 +108,7 @@ public class BookServiceTest {
         assertThrows(EntityNotFoundException.class, () -> bookService.findById(404));
     }
 
+    // Тест: создание валидной книги должно сохранить и вернуть DTO
     @Test
     public void createBook_valid_savesAndReturnsDTO() {
         BookDTO request = new BookDTO();
@@ -141,6 +154,7 @@ public class BookServiceTest {
         assertEquals("N", result.getName());
     }
 
+    // Тест: создание книги с null автором должно выбросить IllegalArgumentException
     @Test
     public void createBook_nullAuthor_throwsIllegalArgumentException() {
         BookDTO request = new BookDTO();
@@ -149,6 +163,7 @@ public class BookServiceTest {
         assertThrows(IllegalArgumentException.class, () -> bookService.createBook(request));
     }
 
+    // Тест: создание книги с пустым ником автора должно выбросить IllegalArgumentException
     @Test
     public void createBook_blankAuthorNickname_throwsIllegalArgumentException() {
         BookDTO request = new BookDTO();
@@ -158,6 +173,7 @@ public class BookServiceTest {
         assertThrows(IllegalArgumentException.class, () -> bookService.createBook(request));
     }
 
+    // Тест: создание книги с неизвестным автором должно выбросить EntityNotFoundException
     @Test
     public void createBook_authorNotFound_throwsEntityNotFoundException() {
         BookDTO request = new BookDTO();
@@ -173,6 +189,7 @@ public class BookServiceTest {
         assertThrows(EntityNotFoundException.class, () -> bookService.createBook(request));
     }
 
+    // Тест: создание уже существующей книги должно выбросить IllegalArgumentException
     @Test
     public void createBook_existing_throwsIllegalArgumentException() {
         BookDTO request = new BookDTO();
@@ -194,6 +211,7 @@ public class BookServiceTest {
         assertThrows(IllegalArgumentException.class, () -> bookService.createBook(request));
     }
 
+    // Тест: обновление существующей книги должно обновить и вернуть DTO
     @Test
     public void update_existing_updatesAndReturnsDTO() {
         BookDTO request = new BookDTO();
@@ -222,6 +240,7 @@ public class BookServiceTest {
         assertEquals("updName", result.getName());
     }
 
+    // Тест: обновление несуществующей книги должно выбросить EntityNotFoundException
     @Test
     public void update_notExisting_throwsEntityNotFoundException() {
         BookDTO request = new BookDTO();
@@ -233,6 +252,7 @@ public class BookServiceTest {
         assertThrows(EntityNotFoundException.class, () -> bookService.update(request));
     }
 
+    // Тест: удаление несуществующей книги должно выбросить EntityNotFoundException
     @Test
     public void delete_nonExisting_throwsEntityNotFoundException() {
         when(bookRepository.existsById(99)).thenReturn(false);
